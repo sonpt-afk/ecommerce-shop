@@ -2,7 +2,7 @@ import axios from "axios";
 import { useState } from "react";
 import { useEffect } from "react";
 
-export function useFetch(url, query) {
+export function useFetch(url, query = '') {
   const [data, setData] = useState([]);
   const [reload, setReload] = useState(false)
   const reloadData = ()=>{
@@ -10,7 +10,7 @@ export function useFetch(url, query) {
   }
   const [paging, setPaging] = useState({
     page: 1,
-    pageSize: 5,
+    pageSize: 8,
     total: 10,
   });
 

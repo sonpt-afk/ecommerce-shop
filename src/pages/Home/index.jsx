@@ -1,6 +1,10 @@
 import './Home.css'
+import ProductList from '@/components/Product/ProductList'
 export default function Home(){
     return (
-        <>Home {import.meta.env.VITE_BASE_API_URL}</>
+        <>
+            <ProductList />
+            <ProductList query="filters[idCategories][slug]=laptop-gaming"/>
+        </>
     )
 }
