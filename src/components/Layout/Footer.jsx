@@ -1,7 +1,9 @@
+import {Row, Col} from 'antd'
+
 export default function Footer(){
     return (
-        <>
-            <h1>Footer</h1>
-        </>
+        <Row>
+           <Col>Made by Nodemy</Col>
+        </Row>
     )
 }
