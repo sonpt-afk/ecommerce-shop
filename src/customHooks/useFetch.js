@@ -5,6 +5,7 @@ import { useEffect } from "react";
 export function useFetch(url, query = '') {
   const [data, setData] = useState([]);
   const [reload, setReload] = useState(false)
+  const [loading, setLoading] = useState(true)
   const reloadData = ()=>{
     setReload(!reload)
   }
@@ -26,8 +27,10 @@ export function useFetch(url, query = '') {
       })
       .catch((err) => {
         console.log(err);
+      }).finally(()=>{
+        setLoading(false)
       });
   }, [url, paging.page, paging.pageSize, reload, query]);
 
-  return {data, setData, paging, setPaging, reload, reloadData};
+  return {data, setData, paging, setPaging, reload, reloadData, loading, setLoading};
 }
