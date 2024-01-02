@@ -44,7 +44,7 @@ export default function ProductList(props){
                 {data.map(item=>{
                     let imgUrl = item?.attributes?.image?.data[0]?.attributes?.url ? import.meta.env.VITE_BASE_API_URL + item?.attributes?.image?.data[0]?.attributes?.url : ''
                     return (
-                        <Col md={6} sm={24} className="product">
+                        <Col key={item?.id} md={6} sm={24} className="product">
                             <Card 
                                 key={item?.id}
                                 hoverable
