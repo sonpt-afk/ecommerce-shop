@@ -1,10 +1,14 @@
 import './Home.css'
-import ProductList from '@/components/Product/ProductList'
+import ProductBlock from '@/components/Product/ProductBlock'
 export default function Home(){
     return (
         <>  
-            <ProductList />
-            <ProductList query="filters[idCategories][slug]=laptop-gaming"/>
+            <ProductBlock title="Sản phẩm mới" link="/"/>
+            <ProductBlock 
+                title="Laptop Gaming" 
+                query="filters[idCategories][slug]=laptop-gaming"
+                link="/danh-muc/laptop-gaming"
+            />
         </>
     )
 }
