@@ -15,7 +15,9 @@ export default function Category(){
     const params = useParams()
     const [brandCheckList, setBrandCheckList] = useState([])
     const [sortPrice, setSortPrice] = useState("asc")
+    const [priceCondition, setPriceCondidtion] = useState({})
     const [query, setQuery] = useSearchParams()
+    const [formPriceCondition] = Form.useForm()
     function getQueryToObject(){
         let result = {}
         query.forEach((value, key)=>{
@@ -28,8 +30,14 @@ export default function Category(){
         let queryObj = getQueryToObject()
         let defaultSort = queryObj.sort ? queryObj?.sort : "asc"
         let defaultBrand = queryObj.brand ? queryObj?.brand?.split(',') : []
+        let defaultPriceCondition = {
+            minPrice: queryObj.minPrice,
+            maxPrice: queryObj.maxPrice
+        }
         setBrandCheckList(defaultBrand)
         setSortPrice(defaultSort)
+        setPriceCondidtion(defaultPriceCondition)
+        formPriceCondition.setFieldsValue(defaultPriceCondition)
     }, [])
     
     const handleBrandChange = (values)=>{
@@ -45,7 +53,35 @@ export default function Category(){
         queryObj.sort = value
         setQuery(queryObj)
     }
+    const handleMinMaxChange = (value)=>{
+        let queryObj = getQueryToObject()
+        if(value.minPrice){
+            queryObj.minPrice = value.minPrice 
+        }else{
+            delete queryObj.minPrice
+        }
+        if(value.maxPrice){
+            queryObj.maxPrice = value.maxPrice
+        }else{
+            delete queryObj.maxPrice
+        }
+        setPriceCondidtion(value)
+        setQuery(queryObj)
+    }
+    const handleResetFilter = ()=>{
+        setPriceCondidtion({})
+        setBrandCheckList([])
+        setSortPrice('asc')
+        setQuery({})
+        formPriceCondition.resetFields()
+    }
     let queryFilterTxt = `filters[idCategories][slug]=${params.category}`
+    if(priceCondition.minPrice){
+        queryFilterTxt += `&filters[price][$gte]=${priceCondition.minPrice}`
+    }
+    if(priceCondition.maxPrice){
+        queryFilterTxt += `&filters[price][$lte]=${priceCondition.maxPrice}`
+    }
     if(sortPrice){
         queryFilterTxt += `&sort[1]=price:${sortPrice}`
     }
@@ -58,7 +94,7 @@ export default function Category(){
     return (
         <>
             <Layout>
-                <Sider style={{background: 'white'}}>
+                <Sider style={{background: 'white', padding: '20px'}} width={350}>
                     <h1>Lọc theo Hãng</h1>
                     <CheckboxGroup options={['asus', 'acer', 'dell']} value={brandCheckList} onChange={handleBrandChange}/>
                     <h1>Sắp xếp</h1>
@@ -73,10 +109,10 @@ export default function Category(){
                             value: 'desc'
                         }]}
                     ></Select>
-                </Sider>
-                <Content>
                     <Form
                         name="price-form"
+                        onFinish={handleMinMaxChange}
+                        form={formPriceCondition}
                     >
                         <Form.Item
                             label="Gia thấp nhất"
@@ -88,9 +124,11 @@ export default function Category(){
                             name="maxPrice"
                         ><Input/>
                         </Form.Item>
-                        <Button>Lọc</Button>
+                        <Button htmlType='submit'>Lọc</Button>
                     </Form>
-
+                    <Button onClick={handleResetFilter}>Xoa Loc</Button>
+                </Sider>
+                <Content>
                     <ProductList query={queryFilterTxt}/>
                 </Content>
             </Layout>
