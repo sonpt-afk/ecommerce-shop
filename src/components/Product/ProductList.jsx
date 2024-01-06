@@ -4,6 +4,7 @@ import {
     Pagination,
     Skeleton
 } from 'antd'
+import { Link } from 'react-router-dom';
 import {useFetch} from '@/customHooks/useFetch'
 import './ProductList.scss'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
@@ -45,13 +46,16 @@ export default function ProductList(props){
                     let imgUrl = item?.attributes?.image?.data[0]?.attributes?.url ? import.meta.env.VITE_BASE_API_URL + item?.attributes?.image?.data[0]?.attributes?.url : ''
                     return (
                         <Col key={item?.id} md={6} sm={24} className="product">
-                            <Card 
-                                key={item?.id}
-                                hoverable
-                                cover={<LazyLoadImage src={imgUrl}/>}
-                            >
-                                <Meta title={item?.attributes?.name} description={item?.attributes?.description?.substring(0, 30)} />
-                            </Card>
+                            <Link to={`/sanpham/${item?.attributes?.slug}`}>
+                                <Card 
+                                    key={item?.id}
+                                    hoverable
+                                    cover={<LazyLoadImage src={imgUrl}/>}
+                                >   
+                                    <Meta title={item?.attributes?.name} description={item?.attributes?.description?.substring(0, 30)} />
+                                    <Meta title={Number(item?.attributes?.price)?.toLocaleString('vi', {style:"currency", currency:"VND"})} />
+                                </Card>
+                            </Link>
                         </Col>
                     )
                 })}
@@ -66,6 +70,7 @@ export default function ProductList(props){
                         page: page
                     })
                 }}
+                style={{margin: '10px 0'}}
             ></Pagination>
         </>)
     }

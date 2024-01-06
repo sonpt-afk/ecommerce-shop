@@ -9,6 +9,8 @@ import {
     Checkbox
 } from 'antd'
 import { useEffect, useState } from 'react'
+import {useFetch} from '@/customHooks/useFetch'
+import './Category.scss'
 const { Sider, Content } = Layout
 const CheckboxGroup = Checkbox.Group
 export default function Category(){
@@ -26,24 +28,14 @@ export default function Category(){
 
         return result
     }
-    useEffect(()=>{
-        let queryObj = getQueryToObject()
-        let defaultSort = queryObj.sort ? queryObj?.sort : "asc"
-        let defaultBrand = queryObj.brand ? queryObj?.brand?.split(',') : []
-        let defaultPriceCondition = {
-            minPrice: queryObj.minPrice,
-            maxPrice: queryObj.maxPrice
-        }
-        setBrandCheckList(defaultBrand)
-        setSortPrice(defaultSort)
-        setPriceCondidtion(defaultPriceCondition)
-        formPriceCondition.setFieldsValue(defaultPriceCondition)
-    }, [])
-    
+
     const handleBrandChange = (values)=>{
         setBrandCheckList(values)
         let queryObj = getQueryToObject()
         queryObj.brand = values.join(',')
+        if(values.length <= 0){
+            delete queryObj.brand
+        }
         setQuery(queryObj)
     }
     
@@ -75,7 +67,29 @@ export default function Category(){
         setQuery({})
         formPriceCondition.resetFields()
     }
-    let queryFilterTxt = `filters[idCategories][slug]=${params.category}`
+    useEffect(()=>{
+        let queryObj = getQueryToObject()
+        let defaultSort = queryObj.sort ? queryObj?.sort : "asc"
+        let defaultBrand = queryObj.brand ? queryObj?.brand?.split(',') : []
+        let defaultPriceCondition = {
+            minPrice: queryObj.minPrice,
+            maxPrice: queryObj.maxPrice
+        }
+        setBrandCheckList(defaultBrand)
+        setSortPrice(defaultSort)
+        setPriceCondidtion(defaultPriceCondition)
+        formPriceCondition.setFieldsValue(defaultPriceCondition)
+    }, [])
+    let {data:brands, setData:setBrands} = useFetch('/brands')
+    brands = brands.map(item=>{
+        return item?.attributes?.name
+    })
+    
+    let queryFilterTxt = ''
+    if(params.category !== 'san-pham-moi'){
+        queryFilterTxt = `filters[idCategories][slug]=${params.category}`
+    }
+
     if(priceCondition.minPrice){
         queryFilterTxt += `&filters[price][$gte]=${priceCondition.minPrice}`
     }
@@ -93,12 +107,13 @@ export default function Category(){
     }
     return (
         <>
-            <Layout>
+            <Layout className='category-wrapper'>
                 <Sider style={{background: 'white', padding: '20px'}} width={350}>
                     <h1>Lọc theo Hãng</h1>
-                    <CheckboxGroup options={['asus', 'acer', 'dell']} value={brandCheckList} onChange={handleBrandChange}/>
+                    <CheckboxGroup options={brands} value={brandCheckList} onChange={handleBrandChange}/>
                     <h1>Sắp xếp</h1>
                     <Select
+                        className='sort-price'
                         value={sortPrice}
                         onChange={handleSortPricechange}
                         options={[{
