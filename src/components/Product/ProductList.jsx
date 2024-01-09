@@ -10,8 +10,8 @@ import './ProductList.scss'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 const { Meta } = Card;
 
-export default function ProductList(props){
-    const {data, paging, setPaging, loading} = useFetch('/products', props.query)
+export default function ProductList({query, type = 'row', showPagination = true, pageSize = 8}){
+    const {data, paging, setPaging, loading} = useFetch('/products', query, pageSize )
 
     let loadingElement = <Row gutter={[15, 15]} justify="space-between">
         <Row gutter={[0, 15]} className="skeleton-container">
@@ -41,11 +41,11 @@ export default function ProductList(props){
         return loadingElement
     }else{
         return (<>
-            <Row gutter={[0, 30]}>
+            <Row gutter={[0, 30]} style={{flexDirection: type}}>
                 {data.map(item=>{
                     let imgUrl = item?.attributes?.image?.data[0]?.attributes?.url ? import.meta.env.VITE_BASE_API_URL + item?.attributes?.image?.data[0]?.attributes?.url : ''
                     return (
-                        <Col key={item?.id} md={6} sm={24} className="product">
+                        <Col key={item?.id} md={type=='column' ? 24 : 6} sm={24} className="product">
                             <Link to={`/sanpham/${item?.attributes?.slug}`}>
                                 <Card 
                                     key={item?.id}
@@ -60,18 +60,20 @@ export default function ProductList(props){
                     )
                 })}
             </Row>
-            <Pagination 
-                total={paging.total} 
-                current={paging.page} 
-                pageSize={paging.pageSize}
-                onChange={(page)=>{
-                    setPaging({
-                        ...paging,
-                        page: page
-                    })
-                }}
-                style={{margin: '10px 0'}}
-            ></Pagination>
+            {
+                showPagination ? <Pagination 
+                    total={paging.total} 
+                    current={paging.page} 
+                    pageSize={paging.pageSize}
+                    onChange={(page)=>{
+                        setPaging({
+                            ...paging,
+                            page: page
+                        })
+                    }}
+                    style={{margin: '10px 0'}}
+                ></Pagination> : null
+            }
         </>)
     }
 }
