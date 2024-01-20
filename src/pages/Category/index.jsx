@@ -1,17 +1,18 @@
 import ProductList from '@/components/Product/ProductList'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useParams, useSearchParams, Link } from 'react-router-dom'
 import {
     Form,
     Input,
     Button,
-    Layout,
     Select,
-    Checkbox
+    Checkbox,
+    Row,
+    Col,
+    Collapse
 } from 'antd'
 import { useEffect, useState } from 'react'
 import {useFetch} from '@/customHooks/useFetch'
 import './Category.scss'
-const { Sider, Content } = Layout
 const CheckboxGroup = Checkbox.Group
 export default function Category(){
     const params = useParams()
@@ -20,6 +21,7 @@ export default function Category(){
     const [priceCondition, setPriceCondidtion] = useState({})
     const [query, setQuery] = useSearchParams()
     const [formPriceCondition] = Form.useForm()
+    const [childData, setChildData] = useState({})
     function getQueryToObject(){
         let result = {}
         query.forEach((value, key)=>{
@@ -80,14 +82,27 @@ export default function Category(){
         setPriceCondidtion(defaultPriceCondition)
         formPriceCondition.setFieldsValue(defaultPriceCondition)
     }, [])
-    let {data:brands, setData:setBrands} = useFetch('/brands')
+    let {data:categoriesList} = useFetch('/categories', '', 100)
+    let {data:brands} = useFetch('/brands', '', 100)
     brands = brands.map(item=>{
         return item?.attributes?.name
     })
     
     let queryFilterTxt = ''
-    if(params.category !== 'san-pham-moi'){
-        queryFilterTxt = `filters[idCategories][slug]=${params.category}`
+
+    let category = ''
+    if(params.category){
+        category = params.category
+    }else{
+        category = query.get('cat')
+    }
+    if(category && category !== 'san-pham-moi' ){
+        queryFilterTxt = `filters[idCategories][slug]=${category}`
+    }
+    
+    let txtSearch = query.get('name')
+    if(txtSearch){
+        queryFilterTxt += `&filters[name][$contains]=${txtSearch}`
     }
 
     if(priceCondition.minPrice){
@@ -105,48 +120,74 @@ export default function Category(){
             queryFilterTxt += `&filters[idBrand][name][$in][${index}]=${value}`
         })
     }
+    const itemsFilterCollapse = [
+        {
+          key: '1',
+          label: <h4>Lọc theo Hãng</h4>,
+          children: <CheckboxGroup options={brands} value={brandCheckList} onChange={handleBrandChange}/>,
+        },
+        {
+          key: '2',
+          label: <h4>Sắp xếp</h4>,
+          children: (
+            <>
+                <Select
+                    className='sort-price'
+                    value={sortPrice}
+                    onChange={handleSortPricechange}
+                    options={[{
+                        label: 'Giá tăng dần',
+                        value: 'asc'
+                    }, {
+                        label: 'Giá giảm dần',
+                        value: 'desc'
+                    }]}
+                ></Select>
+                <Form
+                    name="price-form"
+                    onFinish={handleMinMaxChange}
+                    form={formPriceCondition}
+                >
+                    <Form.Item
+                        label="Gia thấp nhất"
+                        name="minPrice"
+                    ><Input/>
+                    </Form.Item>
+                    <Form.Item
+                        label="Gia cao nhất"
+                        name="maxPrice"
+                    ><Input/>
+                    </Form.Item>
+                    <Button htmlType='submit'>Lọc</Button>
+                </Form>
+                <Button onClick={handleResetFilter}>Xoa Loc</Button>
+            </>
+          ),
+        },
+        {
+            key: 3,
+            label: <h4>Chọn danh mục</h4>,
+            children: (<div className='categories-list'>
+                {categoriesList?.map(item=>{
+                    return <Link to={`/danh-muc/${item?.attributes?.slug}`} key={item?.id}>{item?.attributes?.name}</Link>
+                })}
+            </div>)
+        }
+    ];
     return (
-        <>
-            <Layout className='category-wrapper'>
-                <Sider style={{background: 'white', padding: '20px'}} width={350}>
-                    <h1>Lọc theo Hãng</h1>
-                    <CheckboxGroup options={brands} value={brandCheckList} onChange={handleBrandChange}/>
-                    <h1>Sắp xếp</h1>
-                    <Select
-                        className='sort-price'
-                        value={sortPrice}
-                        onChange={handleSortPricechange}
-                        options={[{
-                            label: 'Giá tăng dần',
-                            value: 'asc'
-                        }, {
-                            label: 'Giá giảm dần',
-                            value: 'desc'
-                        }]}
-                    ></Select>
-                    <Form
-                        name="price-form"
-                        onFinish={handleMinMaxChange}
-                        form={formPriceCondition}
-                    >
-                        <Form.Item
-                            label="Gia thấp nhất"
-                            name="minPrice"
-                        ><Input/>
-                        </Form.Item>
-                        <Form.Item
-                            label="Gia cao nhất"
-                            name="maxPrice"
-                        ><Input/>
-                        </Form.Item>
-                        <Button htmlType='submit'>Lọc</Button>
-                    </Form>
-                    <Button onClick={handleResetFilter}>Xoa Loc</Button>
-                </Sider>
-                <Content>
-                    <ProductList query={queryFilterTxt}/>
-                </Content>
-            </Layout>
+        <>  
+            <div className="search-result">
+                {txtSearch ? <h1>Tìm kiếm: {txtSearch}</h1> : null}
+                <h1>{childData?.paging?.total} Sản phẩm</h1>
+            </div>
+            <Row className='category-wrapper'>
+                <Col xs={24} md={6} style={{background: 'white', padding: '20px'}}>
+                    <Collapse items={itemsFilterCollapse} defaultActiveKey={['1']}/>
+                </Col>
+                <Col xs={24} md={18}>
+                    <ProductList query={queryFilterTxt} transferDataToParent={setChildData}/>
+                </Col>
+            </Row>
             
         </>
     )

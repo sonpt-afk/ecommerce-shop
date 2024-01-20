@@ -10,6 +10,7 @@ const router = createBrowserRouter([{
     children: [
         {path: '/', element: <Home/>},
         {path: '/danh-muc/:category', element: <Category/>},
+        {path: '/tim', element: <Category/>},
         {path: '/sanpham/:slug', element: <ProductDetail/>}
     ]
 }])

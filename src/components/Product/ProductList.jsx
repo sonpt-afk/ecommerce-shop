@@ -8,11 +8,16 @@ import { Link } from 'react-router-dom';
 import {useFetch} from '@/customHooks/useFetch'
 import './ProductList.scss'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { useEffect } from 'react';
 const { Meta } = Card;
 
-export default function ProductList({query, type = 'row', showPagination = true, pageSize = 8}){
+export default function ProductList({query, type = 'row', showPagination = true, pageSize = 8, transferDataToParent}){
     const {data, paging, setPaging, loading} = useFetch('/products', query, pageSize )
-
+    useEffect(()=>{
+        if(typeof transferDataToParent === 'function'){
+            transferDataToParent({data, paging, setPaging, loading}) 
+        }
+    }, [data, paging, setPaging, loading])
     let loadingElement = <Row gutter={[15, 15]} justify="space-between">
         <Row gutter={[0, 15]} className="skeleton-container">
             <Col span={24}><Skeleton.Image active/></Col>
