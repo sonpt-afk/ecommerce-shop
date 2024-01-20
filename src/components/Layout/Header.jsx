@@ -2,6 +2,7 @@ import {Row, Col, Menu, Button, Space, Drawer} from 'antd'
 import {MenuOutlined} from '@ant-design/icons'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import SearchComponent from '../Search/SearchComponent';
 export default function Header(){
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
@@ -39,13 +40,16 @@ export default function Header(){
     )
 
     return (
-        <Row justify={'space-between'}>  
-            <Col span={4} className='logo'><Link to='/'><img src="/vite.svg" alt="" /></Link></Col>
-            <Col span={18}>
+        <Row justify={'space-between'} align={'middle'}>  
+            <Col xs={2} md={2} className='logo'><Link to='/'><img src="/vite.svg" alt="" /></Link></Col>
+            <Col xs={16} md={10}>
+                <SearchComponent/>
+            </Col>
+            <Col xs={0} md={10}>
                 {menuHorizontal}
                 {menuVertical}
             </Col>
-            <Col className='show-on-mobile'><MenuOutlined onClick={showDrawer}/></Col>
+            <Col xs={2} md={2} className='show-on-mobile'><MenuOutlined onClick={showDrawer}/></Col>
         </Row>
     )
 }
