@@ -2,18 +2,22 @@ import { useParams, Link } from "react-router-dom"
 import {useFetch} from '@/customHooks/useFetch'
 import Markdown from 'react-markdown'
 import {
-    Layout, Row, Col, Button, InputNumber
+    Layout, Row, Col, Button, InputNumber, Form
 } from 'antd'
 import ProductBlock from "./ProductBlock"
 import "react-image-gallery/styles/css/image-gallery.css";
 import ImageGallery from "react-image-gallery";
 import './ProductDetail.scss' 
 import { useState } from "react"
+import { useDispatch } from "react-redux"
+import { addProduct } from "../../redux/cartSlice"
 
 const {Content, Sider} = Layout
 
 export default function ProductDetail(){
+    const dispatch = useDispatch()
     const params = useParams()
+    const [form] = Form.useForm()
     const {data, setData} = useFetch(`/products/${params.slug}`)
     let contentBody = data?.attributes?.description?.replaceAll("](/uploads/", "](https://backoffice.nodemy.vn/uploads/")
     let brand = data?.attributes?.idBrand?.data?.attributes?.name
@@ -23,7 +27,7 @@ export default function ProductDetail(){
     }, `filters[slug][$ne]=${params.slug}`)
 
     let categoriesLink = categories?.map(item=>{
-        return <Link to={`/danh-muc/${item?.attributes?.slug}`}>{item?.attributes?.name}</Link>
+        return <Link key={item?.id} to={`/danh-muc/${item?.attributes?.slug}`}>{item?.attributes?.name}</Link>
     })
 
     let imgList = data?.attributes?.image?.data?.map(item=>{
@@ -39,6 +43,14 @@ export default function ProductDetail(){
         number = number < 0 ? 0 : number
 
         return number.toLocaleString('vi', {style:"currency", currency:"VND"})
+    }
+
+    function addToCart(){
+        dispatch(addProduct({
+            id: data?.id,
+            quantity: form.getFieldValue('quantity'),
+            quantityAvailable: data?.attributes?.quantityAvailable
+        }))
     }
 
     return (<>
@@ -69,14 +81,22 @@ export default function ProductDetail(){
                         {data?.attributes?.quantityAvailable ? (<>
                             <div>
                                 <span className="label-field">Số lượng: </span>
-                                <InputNumber
-                                    min={1}
-                                    max={data?.attributes?.quantityAvailable || 1}
-                                    defaultValue={1}
-                                />
+                                <Form form={form}>
+                                    <Form.Item
+                                        name="quantity"
+                                        initialValue={1}
+                                    >
+                                        <InputNumber
+                                            min={1}
+                                            max={data?.attributes?.quantityAvailable || 1}
+                                        />
+                                    </Form.Item>
+                                </Form>
                             </div>
                             <div className="btn-wrapper">
-                                <Button className="btn" type="primary">Thêm giỏ hàng</Button>
+                                <Button className="btn" type="primary"
+                                    onClick={addToCart}
+                                >Thêm giỏ hàng</Button>
                             </div>
                         </>) : (
                             <div className="btn-wrapper">
