@@ -9,6 +9,7 @@ import {useFetch} from '@/customHooks/useFetch'
 import './ProductList.scss'
 import { LazyLoadImage } from 'react-lazy-load-image-component';
 import { useEffect } from 'react';
+import {convertToCurrency} from '@/common/currencyHelper'
 const { Meta } = Card;
 
 export default function ProductList({query, type = 'row', showPagination = true, pageSize = 8, transferDataToParent}){
@@ -58,7 +59,7 @@ export default function ProductList({query, type = 'row', showPagination = true,
                                     cover={<LazyLoadImage src={imgUrl}/>}
                                 >   
                                     <Meta title={item?.attributes?.name} description={item?.attributes?.description?.substring(0, 30)} />
-                                    <Meta title={Number(item?.attributes?.price)?.toLocaleString('vi', {style:"currency", currency:"VND"})} />
+                                    <Meta title={convertToCurrency(item?.attributes?.price)} />
                                 </Card>
                             </Link>
                         </Col>

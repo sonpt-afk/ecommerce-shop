@@ -11,7 +11,7 @@ import './ProductDetail.scss'
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { addProduct } from "../../redux/cartSlice"
-
+import {convertToCurrency} from '@/common/currencyHelper'
 const {Content, Sider} = Layout
 
 export default function ProductDetail(){
@@ -36,14 +36,6 @@ export default function ProductDetail(){
             thumbnail: import.meta.env.VITE_BASE_API_URL + item?.attributes?.formats?.thumbnail?.url
         }
     })
-
-    function convertToCurrency(txt){
-        let number = Number(txt)
-        number = isNaN(number) ? 0 : number
-        number = number < 0 ? 0 : number
-
-        return number.toLocaleString('vi', {style:"currency", currency:"VND"})
-    }
 
     function addToCart(){
        
