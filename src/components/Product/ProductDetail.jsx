@@ -46,11 +46,44 @@ export default function ProductDetail(){
     }
 
     function addToCart(){
+       
+        let cart = document.querySelector('#cart')
+        let menuIcon = document.querySelector('#menu-icon')
+        let anchor = cart ? cart.getBoundingClientRect() : menuIcon.getBoundingClientRect()
+        let posCart = {
+            y: anchor.top,
+            x: anchor.left
+        }
+        let imgProduct = document.querySelector('.image-gallery-image')
+        let imgProductClone = imgProduct.cloneNode()
+        let time = 1.2
+        imgProductClone.style.cssText = `
+            position: fixed;
+            top: 200px;
+            left: 300px;
+            width: 100px;
+            height: 100px;
+            z-index: 999;
+            transform: translate(-50%, -50%);
+            transition: all ${time}s ease-in-out;
+        `
+        document.body.appendChild(imgProductClone)
+
+        setTimeout(()=>{
+            imgProductClone.style.width = `50px`
+            imgProductClone.style.height = `50px`
+            imgProductClone.style.left = `${posCart.x}px`
+            imgProductClone.style.top = `${posCart.y}px`
+        })
+       setTimeout(()=>{
+        imgProductClone.remove()
         dispatch(addProduct({
             id: data?.id,
             quantity: form.getFieldValue('quantity'),
             quantityAvailable: data?.attributes?.quantityAvailable
         }))
+       }, (time * 1000))
+       
     }
 
     return (<>
@@ -59,7 +92,7 @@ export default function ProductDetail(){
                 <h1 className="title">{data?.attributes?.name}</h1>
                 <Row gutter={[10, 10]}>
                     <Col xs={24} md={12}>
-                        {imgList ? <ImageGallery items={imgList} /> : null}
+                        {imgList ? <ImageGallery items={imgList}/> : null}
                     </Col>
                     <Col xs={24} md={12} className="info">
                         <div> 

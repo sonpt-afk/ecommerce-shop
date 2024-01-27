@@ -1,9 +1,11 @@
-import {Row, Col, Menu, Button, Space, Drawer} from 'antd'
-import {MenuOutlined} from '@ant-design/icons'
+import {Row, Col, Menu, Drawer, Badge} from 'antd'
+import {MenuOutlined, ShoppingCartOutlined} from '@ant-design/icons'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SearchComponent from '../Search/SearchComponent';
+import { useSelector } from 'react-redux';
 export default function Header(){
+    const productList = useSelector(state => state.cart.productList)
     const [open, setOpen] = useState(false);
     const showDrawer = () => {
       setOpen(true);
@@ -18,6 +20,14 @@ export default function Header(){
     {
         key: 2,
         label: <Link to='/danh-muc/san-pham-moi'>San pham moi</Link>
+    },
+    {
+        key: 3,
+        label: <Link to='/giohang'>
+            <Badge count={productList?.length} overflowCount={10} offset={[10, 5]} id="cart">
+                <ShoppingCartOutlined style={{fontSize: 22}}/>
+            </Badge>
+        </Link>
     }]
     let menuHorizontal = (
         <Menu
@@ -49,7 +59,7 @@ export default function Header(){
                 {menuHorizontal}
                 {menuVertical}
             </Col>
-            <Col xs={2} md={2} className='show-on-mobile'><MenuOutlined onClick={showDrawer}/></Col>
+            <Col xs={2} md={2} className='show-on-mobile'><MenuOutlined id="menu-icon" onClick={showDrawer}/></Col>
         </Row>
     )
 }
