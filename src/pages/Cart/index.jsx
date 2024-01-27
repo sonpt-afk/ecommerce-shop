@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from "react-redux"
-import { setQuantityProduct } from '@/redux/cartSlice'
+import { setQuantityProduct, removeProduct } from '@/redux/cartSlice'
 import {useFetch} from '@/customHooks/useFetch'
 import {Table, InputNumber, Row, Col, Button} from 'antd'
+import {DeleteOutlined} from '@ant-design/icons'
 import { Link } from "react-router-dom"
 import './Cart.scss'
 import { convertToCurrency } from "@/common/currencyHelper"
@@ -13,7 +14,7 @@ export default function Cart(){
     }, '')
     
     let {data} = productList.length && useFetch(`/products`, query)
-    let dataSource = data.map(item=>{
+    let dataSource = data?.map(item=>{
         let productFinded = productList.find(product=> product?.id === item?.id)
         let quantity = 0
         if(productFinded){
@@ -26,6 +27,9 @@ export default function Cart(){
             quantity: quantity
         }
     })
+    function handleRemoveItem(id){
+        dispatch(removeProduct(id))
+    }
     const columns = [
         {
           title: 'Tên SP',
@@ -56,7 +60,11 @@ export default function Cart(){
                                 }))
                             }}
                             ></InputNumber>
+                            <p>Còn: {max}</p>
                             <p className="money">{convertToCurrency(item.quantity * item?.attributes?.price)}</p>
+                            <DeleteOutlined onClick={()=>{
+                                handleRemoveItem(item?.id)
+                            }}/>
                         </div>
                     </div>
                 </div>
@@ -79,26 +87,40 @@ export default function Cart(){
             render: item => {
                 let max = item?.attributes?.quantityAvailable
                 return (
-                    <InputNumber
-                        defaultValue={item?.quantity}
-                        min={1}
-                        max={max}
-                        onChange={(value)=>{
-                            dispatch(setQuantityProduct({
-                                id: item?.id,
-                                quantity: value,
-                                quantityAvailable: max
-                            }))
-                        }}
-                    ></InputNumber>
+                    <Row gutter={[0, 10]}>
+                        <Col span={24}>
+                            <InputNumber
+                            defaultValue={item?.quantity}
+                            min={1}
+                            max={max}
+                            onChange={(value)=>{
+                                dispatch(setQuantityProduct({
+                                    id: item?.id,
+                                    quantity: value,
+                                    quantityAvailable: max
+                                }))
+                            }}
+                            />
+                        </Col>
+                        <Col span={24}><span>Còn: {max}</span></Col>
+                    </Row>
                 )
             }
         },{
             title: 'Thành tiền',
             responsive: ['md'],
             render: item => <p className="money">{convertToCurrency(item.quantity * item?.attributes?.price)}</p>
+        },
+        {
+            title: 'Xoá',
+            responsive: ['md'],
+            render: item => <DeleteOutlined onClick={()=>{
+                handleRemoveItem(item?.id)
+            }}>
+            </DeleteOutlined>
         }
     ];
+  
     return (
         <>  
             {
@@ -109,7 +131,12 @@ export default function Cart(){
                         pagination={false}
                         dataSource={dataSource} columns={columns}
                     ></Table> 
-                ) : null
+                ) : (
+                    <Row justify={"center"} align={'middle'}>
+                        <h3 style={{padding: 10}}>Chưa có sản phẩm nào</h3>
+                        <Link to="/">Quay về trang chủ</Link>
+                    </Row>
+                )
             }
             <Row className="sumary" justify={'end'} align={'middle'}>
                 <Col><Button>Thanh toan</Button></Col>

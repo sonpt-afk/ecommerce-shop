@@ -41,7 +41,12 @@ export default function ProductDetail(){
        
         let cart = document.querySelector('#cart')
         let menuIcon = document.querySelector('#menu-icon')
-        let anchor = cart ? cart.getBoundingClientRect() : menuIcon.getBoundingClientRect()
+        let anchor = null
+        if(window.innerWidth < 768){
+            anchor = menuIcon.getBoundingClientRect()
+        }else{
+            anchor = cart.getBoundingClientRect()
+        }
         let posCart = {
             y: anchor.top,
             x: anchor.left

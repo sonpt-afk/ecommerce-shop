@@ -15,10 +15,15 @@
         .price, .money{
             color: red;
             font-weight: bold;
+            font-size: 14px;
         }
         .old-price{
             text-decoration: line-through;
+            font-size: 14px;
         }
+    }
+    .anticon{
+        font-size: 20px;
     }
 }
 
