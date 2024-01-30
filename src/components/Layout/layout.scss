@@ -1,3 +1,5 @@
+@import '@/variable'; 
+
 *{
     padding: 0;
     margin: 0;
@@ -29,7 +31,7 @@
 
 
 // === phone down
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: $sm) {
     .show-on-mobile{
         display: block;
     }

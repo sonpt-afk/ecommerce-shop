@@ -12,8 +12,10 @@ export default function Cart(){
     let query = productList.reduce((txtQuery, item, index)=>{
         return txtQuery + `filters[id][$in][${index}]=${item?.id}&`
     }, '')
-    
-    let {data} = productList.length && useFetch(`/products`, query)
+    let {data} = useFetch(`/products`, query)
+    if(!productList?.length){
+        data = []
+    }
     let dataSource = data?.map(item=>{
         let productFinded = productList.find(product=> product?.id === item?.id)
         let quantity = 0

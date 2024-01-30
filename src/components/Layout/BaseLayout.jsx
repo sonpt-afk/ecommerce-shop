@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom"
 import HeaderComponent from './Header'
 import FooterComponent from './Footer'
-import './layout.scss'
+import './Layout.scss'
 import { 
     Layout,
     theme,
