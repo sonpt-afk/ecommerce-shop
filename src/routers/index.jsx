@@ -4,6 +4,7 @@ import Home from "@/pages/Home";
 import Category from "@/pages/Category";
 import ProductDetail from "@/components/Product/ProductDetail";
 import Cart from '@/pages/Cart'
+import Login from '@/pages/Login'
 
 const router = createBrowserRouter([{
     path: '/',
@@ -13,7 +14,8 @@ const router = createBrowserRouter([{
         {path: '/danh-muc/:category', element: <Category/>},
         {path: '/tim', element: <Category/>},
         {path: '/sanpham/:slug', element: <ProductDetail/>},
-        {path: '/giohang', element: <Cart/>}
+        {path: '/giohang', element: <Cart/>},
+        {path: '/login', element: <Login/>}
     ]
 }])
 
