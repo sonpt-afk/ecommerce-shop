@@ -1,33 +1,73 @@
-import {Row, Col, Menu, Drawer, Badge} from 'antd'
+import {Row, Col, Menu, Drawer, Badge, Dropdown} from 'antd'
 import {MenuOutlined, ShoppingCartOutlined} from '@ant-design/icons'
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import SearchComponent from '../Search/SearchComponent';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '@/redux/auth'
 export default function Header(){
     const productList = useSelector(state => state.cart.productList)
+    const user = useSelector(state => state.auth.user)
     const [open, setOpen] = useState(false);
+    const dispatch = useDispatch()
     const showDrawer = () => {
       setOpen(true);
     };
     const onClose = () => {
       setOpen(false);
     };
-    const menuItems = [{
-        key: 1,
-        label: <Link to='/'>Trang chu</Link>
-    },
+
+    const itemsDropdown = [{
+        key: '1',
+        label: (
+          <Link to="#">
+            Hồ sơ
+          </Link>
+        ),
+    },{
+        key: '2',
+        label: (
+          <Link to="#">
+            Đơn mua
+          </Link>
+        ),
+    }, {
+        key: '3',
+        label: (
+          <Link type="text" onClick={()=>{
+            dispatch(logout())
+          }}>
+            Đăng xuất
+          </Link>
+        ),
+    }]
+
+    const menuItems = [
     {
-        key: 2,
+        key: 1,
         label: <Link to='/danh-muc/san-pham-moi'>San pham moi</Link>
     },
     {
-        key: 3,
+        key: 2,
         label: <Link to='/giohang'>
             <Badge count={productList?.length} overflowCount={10} offset={[10, 5]} id="cart">
                 <ShoppingCartOutlined style={{fontSize: 22}}/>
             </Badge>
         </Link>
+    },
+    {
+        key: 3,
+        label: (
+            user?.username ? <Dropdown
+                menu={{
+                    items: itemsDropdown
+                }}
+                placement="bottomLeft"
+                arrow
+            >
+                <Link to={'/'}><h3>{user?.username}</h3></Link>
+            </Dropdown> : <Link to='/login'>Đăng nhập</Link>
+        )
     }]
     let menuHorizontal = (
         <Menu
