@@ -80,11 +80,13 @@ export default function ProductTable({dataSource = [], options={
                             max={max}
                             disabled={!options?.edit}
                             onChange={(value)=>{
-                                dispatch(setQuantityProduct({
-                                    id: item?.id,
-                                    quantity: value,
-                                    quantityAvailable: max
-                                }))
+                                if(value){
+                                    dispatch(setQuantityProduct({
+                                        id: item?.id,
+                                        quantity: value,
+                                        quantityAvailable: max
+                                    }))
+                                }
                             }}
                             />
                         </Col>

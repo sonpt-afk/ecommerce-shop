@@ -22,3 +22,8 @@ export const getMe = async () => {
     const response = await axios.get(`/users/me?populate=role`);
     return response.data;
 }
+
+export const updateMe = async (newInfo) => {
+    const response = await axios.put(`/users/me`, newInfo);
+    return response.data;
+}

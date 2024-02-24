@@ -1,10 +1,12 @@
-import { useSelector } from "react-redux"
+import { useDispatch, useSelector } from "react-redux"
 import {useFetch} from '@/customHooks/useFetch'
 import ProductTable from '@/components/Product/ProductTable'
 import { Button, Row, Col, Form, Input } from "antd"
 import { useEffect } from "react"
+import { saveUserThunk } from "@/redux/auth/thunk"
 export default function Checkout(){
     const [form] = Form.useForm()
+    const dispatch = useDispatch()
     const user = useSelector(state => state.auth.user)
     const productList = useSelector(state => state.cart.productList)
     let query = productList.reduce((txtQuery, item, index)=>{
@@ -37,7 +39,9 @@ export default function Checkout(){
     const onOrder = (values)=>{
         console.log(values);
     }
-    const saveInfo = ()=>{
+    const saveInfo = async ()=>{
+        let newInfo = form.getFieldsValue()
+        dispatch(saveUserThunk(newInfo))
     }
     return (
         <>  
