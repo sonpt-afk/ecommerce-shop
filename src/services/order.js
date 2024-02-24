@@ -5,6 +5,8 @@ export const addOrder = async (contact, totalOrderPrice, listItems)=>{
         "data": {
             "idUser": contact?.idUser,
             "address": contact?.address,
+            "phone": contact?.phone,
+            "customerName": contact?.customerName,
             "totalOrderPrice": totalOrderPrice,
             "status": "new",
             "date": new Date(),

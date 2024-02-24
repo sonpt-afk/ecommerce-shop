@@ -7,6 +7,7 @@ import Cart from '@/pages/Cart'
 import Login from '@/pages/Login'
 import Register from '@/pages/Register'
 import Checkout from '@/pages/Checkout'
+import OrderDetail from "@/pages/Order/OrderDetail";
 
 const router = createBrowserRouter([{
     path: '/',
@@ -19,7 +20,8 @@ const router = createBrowserRouter([{
         {path: '/giohang', element: <Cart/>},
         {path: '/thanhtoan', element: <Checkout/>},
         {path: '/login', element: <Login/>},
-        {path: '/register', element: <Register/>}
+        {path: '/register', element: <Register/>},
+        {path: '/don-hang/:id', element: <OrderDetail/>}
     ]
 }])
 

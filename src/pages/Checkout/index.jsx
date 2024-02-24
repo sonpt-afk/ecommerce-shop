@@ -40,14 +40,17 @@ export default function Checkout(){
     useEffect(()=>{
         form.setFieldsValue({
             address: user?.address,
-            phone: user?.phone
+            phone: user?.phone,
+            customerName: user?.name
         })
-    }, [user?.address, user?.phone])
+    }, [user?.address, user?.phone, user?.name])
     const onOrder = async (values)=>{
        try {
             let contact = {
                 idUser: user?.id,
-                address: values.address
+                address: values?.address,
+                customerName: values?.customerName,
+                phone: values?.phone
             }
             let totalOrderPrice = dataSource?.reduce((total, item)=>{
                 return total + Number(item?.attributes?.price) * item?.quantity 
@@ -62,6 +65,7 @@ export default function Checkout(){
     }
     const saveInfo = async ()=>{
         let newInfo = form.getFieldsValue()
+        newInfo.name = newInfo.customerName ? newInfo.customerName : newInfo.name
         dispatch(saveUserThunk(newInfo))
     }
     return (
@@ -73,6 +77,9 @@ export default function Checkout(){
                 </Col>
                 <Col span={24}>
                     <Form form={form} onFinish={onOrder}>
+                        <Form.Item name="customerName" label="Tên người nhận">
+                            <Input></Input>
+                        </Form.Item>
                         <Form.Item name="phone" label="Điện thoại">
                             <Input></Input>
                         </Form.Item>
