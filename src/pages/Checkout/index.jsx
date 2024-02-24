@@ -4,7 +4,11 @@ import ProductTable from '@/components/Product/ProductTable'
 import { Button, Row, Col, Form, Input } from "antd"
 import { useEffect } from "react"
 import { saveUserThunk } from "@/redux/auth/thunk"
+import { addOrder } from '@/services/order'
+import { useNavigate } from "react-router-dom"
+import { clearCart } from '@/redux/cartSlice'
 export default function Checkout(){
+    const nav = useNavigate()
     const [form] = Form.useForm()
     const dispatch = useDispatch()
     const user = useSelector(state => state.auth.user)
@@ -22,11 +26,14 @@ export default function Checkout(){
         if(productFinded){
             quantity = productFinded.quantity
         }
-
+        let price = Number(item?.attributes?.price)
         return {
             ...item,
+            product: item?.id,
             key: item?.id,
-            quantity: quantity
+            quantity: quantity,
+            price: price,
+            totalPrice: price * quantity
         }
     })
 
@@ -36,8 +43,22 @@ export default function Checkout(){
             phone: user?.phone
         })
     }, [user?.address, user?.phone])
-    const onOrder = (values)=>{
-        console.log(values);
+    const onOrder = async (values)=>{
+       try {
+            let contact = {
+                idUser: user?.id,
+                address: values.address
+            }
+            let totalOrderPrice = dataSource?.reduce((total, item)=>{
+                return total + Number(item?.attributes?.price) * item?.quantity 
+            }, 0)
+
+            await addOrder(contact, totalOrderPrice, dataSource)
+            dispatch(clearCart())
+            nav('/')
+       } catch (error) {
+            alert('Khong the tao Order')
+       }
     }
     const saveInfo = async ()=>{
         let newInfo = form.getFieldsValue()
