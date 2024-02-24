@@ -11,7 +11,6 @@ export default function ProductTable({dataSource = [], options={
     buttonCTA: null
 }}){
     const dispatch = useDispatch()
-    
     function handleRemoveItem(id){
         dispatch(removeProduct(id))
     }
@@ -34,22 +33,23 @@ export default function ProductTable({dataSource = [], options={
                                 <span className="old-price">{convertToCurrency(item?.attributes?.oldPrice)}</span> - <span className="price">{convertToCurrency(item?.attributes?.price)}</span>
                             </div>
                             <InputNumber
-                            defaultValue={item?.quantity}
-                            min={1}
-                            max={max}
-                            onChange={(value)=>{
-                                dispatch(setQuantityProduct({
-                                    id: item?.id,
-                                    quantity: value,
-                                    quantityAvailable: max
-                                }))
-                            }}
+                                disabled={!options?.edit}
+                                defaultValue={item?.quantity}
+                                min={1}
+                                max={max}
+                                onChange={(value)=>{
+                                    dispatch(setQuantityProduct({
+                                        id: item?.id,
+                                        quantity: value,
+                                        quantityAvailable: max
+                                    }))
+                                }}
                             ></InputNumber>
                             <p>Còn: {max}</p>
                             <p className="money">{convertToCurrency(item.quantity * item?.attributes?.price)}</p>
-                            <DeleteOutlined onClick={()=>{
+                            {options?.edit ? <DeleteOutlined onClick={()=>{
                                 handleRemoveItem(item?.id)
-                            }}/>
+                            }}/> : null}
                         </div>
                     </div>
                 </div>
@@ -62,7 +62,7 @@ export default function ProductTable({dataSource = [], options={
           responsive: ['md'],
           render: item => (
             <div>
-                <span className="old-price">{convertToCurrency(item.oldPrice)}</span> - <span className="price">{convertToCurrency(item.price)}</span>
+                <span className="old-price">{convertToCurrency(item?.oldPrice)}</span> - <span className="price">{convertToCurrency(item?.price)}</span>
             </div>
           )
         },
