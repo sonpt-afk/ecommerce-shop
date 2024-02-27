@@ -1,6 +1,6 @@
-import { useParams } from "react-router-dom"
+import { useParams, Link } from "react-router-dom"
 import {useFetch} from '@/customHooks/useFetch'
-import {Row, Col, Steps} from 'antd'
+import {Row, Col, Steps, Breadcrumb} from 'antd'
 import ProductTable from '@/components/Product/ProductTable'
 export default function OrderDetail(){
     const params = useParams()
@@ -59,9 +59,18 @@ export default function OrderDetail(){
             />
         )
     }
-
+    let breadcrumbItems = [{
+        title: <Link to='/'>Trang chủ</Link>
+    }, {
+        title: <Link to='/danh-sach-don-hang'>Đơn hàng</Link>
+    }, {
+        title: <Link to='#'>{params.id}</Link>
+    }]
     return (
         <>  
+            <Breadcrumb
+                items={breadcrumbItems}
+            />
             <h1>Đơn hàng {params.id}</h1>
             {statusOrderComponent}
             <Row>

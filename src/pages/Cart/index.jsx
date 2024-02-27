@@ -1,8 +1,8 @@
 import { useSelector } from "react-redux"
 import {useFetch} from '@/customHooks/useFetch'
 import ProductTable from '@/components/Product/ProductTable'
-import { Button } from "antd"
-import { useNavigate } from "react-router-dom"
+import { Button, Breadcrumb } from "antd"
+import { useNavigate, Link } from "react-router-dom"
 export default function Cart(){
     const nav = useNavigate()
     const productList = useSelector(state => state.cart.productList)
@@ -26,8 +26,16 @@ export default function Cart(){
             quantity: quantity
         }
     })
+    let breadcrumbItems = [{
+        title: <Link to='/'>Trang chủ</Link>
+    }, {
+        title: <Link to='#'>Giỏ hàng</Link>
+    }]
     return (
-        <>
+        <>  
+            <Breadcrumb
+                items={breadcrumbItems}
+            />
             <ProductTable dataSource={dataSource}
                 options={{
                     edit: true,

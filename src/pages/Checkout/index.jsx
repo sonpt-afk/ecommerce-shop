@@ -1,11 +1,11 @@
 import { useDispatch, useSelector } from "react-redux"
 import {useFetch} from '@/customHooks/useFetch'
 import ProductTable from '@/components/Product/ProductTable'
-import { Button, Row, Col, Form, Input } from "antd"
+import { Button, Row, Col, Form, Input, Breadcrumb } from "antd"
 import { useEffect } from "react"
 import { saveUserThunk } from "@/redux/auth/thunk"
 import { addOrder } from '@/services/order'
-import { useNavigate } from "react-router-dom"
+import { useNavigate, Link } from "react-router-dom"
 import { clearCart } from '@/redux/cartSlice'
 import { requiredRule } from '@/common/rules'
 export default function Checkout(){
@@ -73,8 +73,16 @@ export default function Checkout(){
         }).catch(err=>{
         })
     }
+    let breadcrumbItems = [{
+        title: <Link to='/'>Trang chủ</Link>
+    }, {
+        title: <Link to='#'>Thanh toán</Link>
+    }]
     return (
         <>  
+            <Breadcrumb
+                items={breadcrumbItems}
+            />
             <Row>
                 <Col span={24}><h2>Địa chỉ</h2></Col>
                 <Col span={24}>

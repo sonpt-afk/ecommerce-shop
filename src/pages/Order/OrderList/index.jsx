@@ -1,8 +1,8 @@
 import {useFetch} from '@/customHooks/useFetch'
 import ProductTable from '@/components/Product/ProductTable'
-import { Button, Row, Col } from 'antd'
+import { Button, Row, Col, Breadcrumb } from 'antd'
 import './OrderList.scss'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 export default function OrderList(){
     const nav = useNavigate()
     const {data} = useFetch('/my-orders')    
@@ -23,11 +23,17 @@ export default function OrderList(){
             dataSource
         }
     })
-    
+    let breadcrumbItems = [{
+        title: <Link to='/'>Trang chủ</Link>
+    }, {
+        title: <Link to='#'>Đơn hàng</Link>
+    }]
     return (
-        <>
+        <>  
+            <Breadcrumb
+                items={breadcrumbItems}
+            />
             <h1>Danh sách đơn hàng</h1>
-            
             <Row>
                 {listOrderDataSource?.map(({id, dataSource})=>{
                     return (

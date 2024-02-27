@@ -8,7 +8,8 @@ import {
     Checkbox,
     Row,
     Col,
-    Collapse
+    Collapse,
+    Breadcrumb
 } from 'antd'
 import { useEffect, useState } from 'react'
 import {useFetch} from '@/customHooks/useFetch'
@@ -174,8 +175,28 @@ export default function Category(){
             </div>)
         }
     ];
+
+    let breadcrumbItems = [{
+        title: <Link to='/'>Trang chủ</Link>
+    }]
+    if(window.location.href.includes('danh-muc')){
+        breadcrumbItems.push({
+            title: <Link to='#'>Danh mục</Link>
+        }, {
+            title: <Link to='#'>{params.category}</Link>
+        })
+        
+    }else{
+        breadcrumbItems.push({
+            title: <Link to='#'>Tìm kiếm</Link>
+        })
+    }
+
     return (
         <>  
+            <Breadcrumb
+                items={breadcrumbItems}
+            />
             <div className="search-result">
                 {txtSearch ? <h1>Tìm kiếm: {txtSearch}</h1> : null}
                 <h1>{childData?.paging?.total} Sản phẩm</h1>

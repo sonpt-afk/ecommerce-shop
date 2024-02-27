@@ -12,8 +12,8 @@ import { useState } from "react"
 import { useDispatch } from "react-redux"
 import { addProduct } from "../../redux/cartSlice"
 import {convertToCurrency} from '@/common/currencyHelper'
+import { Breadcrumb } from 'antd'
 const {Content, Sider} = Layout
-
 export default function ProductDetail(){
     const dispatch = useDispatch()
     const params = useParams()
@@ -82,9 +82,21 @@ export default function ProductDetail(){
        }, (time * 1000))
        
     }
+    let breadcrumbItems = [{
+        title: <Link to='/'>Trang chủ</Link>
+    }, {
+        title: <Link to='/danh-muc/san-pham-moi'>Sản phẩm</Link>
+    },{
+        title: <Link to={`#`}>{data?.attributes?.name}</Link>
+    }]
 
     return (<>
         <Row gutter={[60, 20]} className="product">
+            <Col span={24}>
+                <Breadcrumb
+                    items={breadcrumbItems}
+                />
+            </Col>
             <Col xs={24} md={18}>
                 <h1 className="title">{data?.attributes?.name}</h1>
                 <Row gutter={[10, 10]}>
@@ -104,7 +116,7 @@ export default function ProductDetail(){
                                 </div>
                              ) : null
                         }
-                        {brand ? <div> <span className="label-field">Thương hiệu: </span> {brand}</div> : null}
+                        {brand ? <div> <span className="label-field">Thương hiệu: </span> <Link to={`/tim?brand=${brand}`}>{brand}</Link></div> : null}
                         {data?.attributes?.cpu ? <div> <span className="label-field">CPU: </span> {data?.attributes?.cpu}</div> : null}
                         {data?.attributes?.ram ? <div><span className="label-field">RAM: </span> {data?.attributes?.ram}</div> : null}
                         {data?.attributes?.quantityAvailable ? <div><span className="label-field">Có sẵn: </span> {data?.attributes?.quantityAvailable}</div> : 'Hết hàng'}
