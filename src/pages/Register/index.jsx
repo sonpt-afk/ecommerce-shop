@@ -11,7 +11,7 @@ const Register = () => {
     try {
       await register(values)
       infoNotify('topRight', 'Thanh Cong', 'Ban da tao thanh cong')
-      nav('/login')
+      nav('/dang-nhap')
     } catch ({response}) {
       var {error} = response.data
       errorNotify('topRight', 'Loi dang ky', error.message)

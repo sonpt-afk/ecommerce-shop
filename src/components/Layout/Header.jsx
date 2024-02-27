@@ -27,7 +27,7 @@ export default function Header(){
     },{
         key: '2',
         label: (
-          <Link to="#">
+          <Link to="/danh-sach-don-hang">
             Đơn mua
           </Link>
         ),
@@ -66,7 +66,7 @@ export default function Header(){
                 arrow
             >
                 <Link to={'/'}><h3>{user?.username}</h3></Link>
-            </Dropdown> : <Link to='/login'>Đăng nhập</Link>
+            </Dropdown> : <Link to='/dang-nhap'>Đăng nhập</Link>
         )
     }]
     let menuHorizontal = (

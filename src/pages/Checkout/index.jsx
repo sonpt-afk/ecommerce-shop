@@ -7,6 +7,7 @@ import { saveUserThunk } from "@/redux/auth/thunk"
 import { addOrder } from '@/services/order'
 import { useNavigate } from "react-router-dom"
 import { clearCart } from '@/redux/cartSlice'
+import { requiredRule } from '@/common/rules'
 export default function Checkout(){
     const nav = useNavigate()
     const [form] = Form.useForm()
@@ -56,17 +57,21 @@ export default function Checkout(){
                 return total + Number(item?.attributes?.price) * item?.quantity 
             }, 0)
 
-            await addOrder(contact, totalOrderPrice, dataSource)
+            let newOrder = await addOrder(contact, totalOrderPrice, dataSource)
             dispatch(clearCart())
-            nav('/')
+            nav(`/don-hang/${newOrder?.data?.id}`)
        } catch (error) {
             alert('Khong the tao Order')
        }
     }
     const saveInfo = async ()=>{
-        let newInfo = form.getFieldsValue()
-        newInfo.name = newInfo.customerName ? newInfo.customerName : newInfo.name
-        dispatch(saveUserThunk(newInfo))
+        form.validateFields()
+        .then(()=>{
+            let newInfo = form.getFieldsValue()
+            newInfo.name = newInfo.customerName ? newInfo.customerName : newInfo.name
+            dispatch(saveUserThunk(newInfo))
+        }).catch(err=>{
+        })
     }
     return (
         <>  
@@ -77,13 +82,13 @@ export default function Checkout(){
                 </Col>
                 <Col span={24}>
                     <Form form={form} onFinish={onOrder}>
-                        <Form.Item name="customerName" label="Tên người nhận">
+                        <Form.Item name="customerName" label="Tên người nhận" rules={[requiredRule]}>
                             <Input></Input>
                         </Form.Item>
-                        <Form.Item name="phone" label="Điện thoại">
+                        <Form.Item name="phone" label="Điện thoại" rules={[requiredRule]}>
                             <Input></Input>
                         </Form.Item>
-                        <Form.Item name="address" label="Địa chỉ">
+                        <Form.Item name="address" label="Địa chỉ" rules={[requiredRule]}>
                             <Input></Input>
                         </Form.Item>
                     </Form>
@@ -95,9 +100,12 @@ export default function Checkout(){
             </Row>
             <ProductTable dataSource={dataSource} options={{
                 edit: false,
-                buttonCTA: <Button onClick={()=>{
-                    form.submit()
-                }}>Đặt hàng</Button>
+                buttonCTA: <Button 
+                    disabled={!dataSource?.length}
+                    onClick={()=>{
+                        form.submit()
+                    }}>Đặt hàng
+                </Button>
             }}></ProductTable>
         </>
     )

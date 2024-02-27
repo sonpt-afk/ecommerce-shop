@@ -31,9 +31,12 @@ export default function Cart(){
             <ProductTable dataSource={dataSource}
                 options={{
                     edit: true,
-                    buttonCTA: <Button onClick={()=>{
-                        nav('/thanhtoan')
-                    }}>Thanh toan</Button>
+                    buttonCTA: <Button 
+                        disabled={!dataSource?.length}
+                        onClick={()=>{
+                            nav('/thanhtoan')
+                        }}>Thanh toan
+                    </Button>
                 }}
             ></ProductTable>
         </>

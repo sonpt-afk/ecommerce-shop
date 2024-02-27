@@ -1,6 +1,6 @@
 import { Button, Form, Input } from 'antd';
 import { emailRule, passwordRule } from '@/common/rules';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import useNotification from '@/customHooks/useNotify'
 import { useDispatch, useSelector } from 'react-redux';
 import { loginThunk } from '@/redux/auth/thunk';
@@ -74,6 +74,7 @@ const Login = () => {
         Submit
       </Button>
     </Form.Item>
+    <Link to='/dang-ky'>Bạn chưa có tài khoản? Đăng ký ngay</Link>
   </Form>
   )
 };
