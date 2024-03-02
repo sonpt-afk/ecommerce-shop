@@ -1,15 +1,16 @@
 import { createBrowserRouter } from "react-router-dom";
-import BaseLayout from "@/components/Layout/BaseLayout";
-import Home from "@/pages/Home";
-import Category from "@/pages/Category";
-import ProductDetail from "@/components/Product/ProductDetail";
-import Cart from '@/pages/Cart'
-import Login from '@/pages/Login'
-import Register from '@/pages/Register'
-import Checkout from '@/pages/Checkout'
-import OrderDetail from "@/pages/Order/OrderDetail";
-import OrderList from "@/pages/Order/OrderList";
-import PrivateRouter from "@/components/PrivateRouter";
+import { lazy } from 'react';
+const BaseLayout = lazy(()=> import("@/components/Layout/BaseLayout"));
+const Home = lazy(()=> import("@/pages/Home"));
+const Category = lazy(()=> import("@/pages/Category"));
+const ProductDetail = lazy(()=> import("@/components/Product/ProductDetail"));
+const Cart = lazy(()=> import('@/pages/Cart'));
+const Login = lazy(()=> import('@/pages/Login'));
+const Register = lazy(()=> import('@/pages/Register'));
+const Checkout = lazy(()=> import('@/pages/Checkout'));
+const OrderDetail = lazy(()=> import("@/pages/Order/OrderDetail"));
+const OrderList = lazy(()=> import("@/pages/Order/OrderList"));
+const PrivateRouter = lazy(()=> import("@/components/PrivateRouter"));
 
 const router = createBrowserRouter([{
     path: '/',
