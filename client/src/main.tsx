@@ -4,9 +4,12 @@ import {
   createBrowserRouter,
   RouterProvider,
 } from "react-router-dom";
+import '~/configs/axios';
 // import router from '~/router';
 import { lazy } from 'react';
-
+import '~/assets/css/index.scss';
+import { Provider } from 'react-redux';
+import { store } from '~/redux/store';
 const Home = lazy(() => import("~/pages/Home"));
 
 
@@ -20,7 +23,8 @@ const router = createBrowserRouter([{
 }])
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>,
 )
