@@ -11,14 +11,15 @@ import '~/assets/css/index.scss';
 import { Provider } from 'react-redux';
 import { store } from '~/redux/store';
 const Home = lazy(() => import("~/pages/Home"));
+const Category = lazy(()=> import("~/pages/Category"));
 
 
 const router = createBrowserRouter([{
   path: '/',
   element: <Home />,
   children: [
-    { path: '/', element: <Home /> },
-    { path: '/', element: <Home /> },
+    {path: '/danh-muc/:category', element: <Category/>},
+    {path: '/tim', element: <Category/>},
 
   ]
 }])
