@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom"
 import NavBar from './Header'
-import EndPage from '../EndPage'
-import './Layout.scss'
+import EndPage from './EndPage'
 import {
     Layout,
     ConfigProvider

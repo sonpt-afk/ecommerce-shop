@@ -81,6 +81,12 @@ const NavBar: React.FC = () => {
             label: <Link to='/accessories'>ACCESSORIES</Link>
 
         },
+        {
+            key: 4,
+            label: <Link to='/about'>ABOUT US</Link>
+
+        },
+
 
     ];
 
