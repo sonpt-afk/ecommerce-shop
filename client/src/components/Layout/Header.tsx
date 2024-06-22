@@ -10,10 +10,12 @@ import { Dropdown, Space } from 'antd';
 import { DownOutlined, SmileOutlined, SearchOutlined, UserOutlined } from '@ant-design/icons';
 import { Flex } from "antd";
 import type { MenuProps } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const NavBar: React.FC = () => {
     const [isOpenSearch, setIsOpenSearch] = useState(false);
     const [isDrawerOpen, setIsOpenDrawer] = useState(false);
+    const navigate = useNavigate();
 
     const showDrawer = () => {
         setIsOpenDrawer(true);
@@ -116,7 +118,7 @@ const NavBar: React.FC = () => {
             <Row justify={'space-between'} align={'middle'}>
                 <Col xs={2} md={2} >
 
-                    <img src={StoreLogo} alt="logo" className="app-logo" />
+                    <img src={StoreLogo} alt="logo" className="app-logo" onClick={() => navigate("/")} />
                 </Col>
                 <Col xs={0} md={10} className='menu'>
                     {menuHorizontal}
@@ -140,7 +142,7 @@ const NavBar: React.FC = () => {
                 </Col>
             </Row>
 
-        </div>
+        </div >
     )
 }
 

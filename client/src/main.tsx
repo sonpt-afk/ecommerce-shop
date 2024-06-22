@@ -10,11 +10,12 @@ import { lazy } from 'react';
 import '~/assets/css/index.scss';
 import { Provider } from 'react-redux';
 import { store } from '~/redux/store';
+import DetailItem from "~/pages/DetailItem"
+import BaseLayout from "~/components/Layout/BaseLayout"
+import Home from "~/pages/Home"
+import Category from "~/pages/Category"
 
-const BaseLayout = lazy(() => import("~/components/Layout/BaseLayout"));
-const Home = lazy(() => import("~/pages/Home"));
-const Category = lazy(() => import("~/pages/Category"));
-const DetailItem = lazy(() => import("~/pages/DetailItem"));
+
 
 const router = createBrowserRouter([{
   path: '/',

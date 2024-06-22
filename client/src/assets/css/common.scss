@@ -40,6 +40,9 @@
 .app {
     &-logo {
         width: 80px;
+        &:hover {
+            cursor: pointer;
+        }
     }
 
     &-icon {
