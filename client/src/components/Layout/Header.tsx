@@ -14,7 +14,6 @@ import type { MenuProps } from 'antd';
 const NavBar: React.FC = () => {
     const [isOpenSearch, setIsOpenSearch] = useState(false);
     const [isDrawerOpen, setIsOpenDrawer] = useState(false);
-    const dispatch = useDispatch()
 
     const showDrawer = () => {
         setIsOpenDrawer(true);
@@ -119,7 +118,7 @@ const NavBar: React.FC = () => {
 
                     <img src={StoreLogo} alt="logo" className="app-logo" />
                 </Col>
-                <Col xs={0} md={10}>
+                <Col xs={0} md={10} className='menu'>
                     {menuHorizontal}
                     {menuVertical}
                 </Col>

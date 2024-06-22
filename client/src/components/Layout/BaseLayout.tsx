@@ -7,6 +7,7 @@ import {
 } from "antd"
 const { Header, Content, Footer } = Layout;
 export default function BaseLayout() {
+
     return (
         <>
             <ConfigProvider
@@ -23,6 +24,7 @@ export default function BaseLayout() {
                     <Content className="content">
                         <Outlet />
                     </Content>
+
                     <Footer className="footer"><EndPage /></Footer>
                 </Layout>
             </ConfigProvider>

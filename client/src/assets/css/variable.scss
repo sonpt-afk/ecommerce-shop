@@ -1,3 +1,4 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap");
 :root {
     // color
     --primary: #a275e3;
@@ -7,6 +8,7 @@
     --btn-primary-color: rgb(10, 41, 70);
     --btn-cancel-color: #f41f1f;
     --divider-line: #8c8ce9;
+    --font-family: "Inter", sans-serif;
 }
 
 $xs: "480px";

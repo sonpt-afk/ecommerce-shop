@@ -10,16 +10,20 @@ import { lazy } from 'react';
 import '~/assets/css/index.scss';
 import { Provider } from 'react-redux';
 import { store } from '~/redux/store';
-const Home = lazy(() => import("~/pages/Home"));
-const Category = lazy(()=> import("~/pages/Category"));
 
+const BaseLayout = lazy(() => import("~/components/Layout/BaseLayout"));
+const Home = lazy(() => import("~/pages/Home"));
+const Category = lazy(() => import("~/pages/Category"));
+const DetailItem = lazy(() => import("~/pages/DetailItem"));
 
 const router = createBrowserRouter([{
   path: '/',
-  element: <Home />,
+  element: <BaseLayout />,
   children: [
-    {path: '/danh-muc/:category', element: <Category/>},
-    {path: '/tim', element: <Category/>},
+    { path: '/', element: <Home /> },
+    { path: '/item-detail', element: <DetailItem /> },
+
+    { path: '/danh-muc/:category', element: <Category /> },
 
   ]
 }])

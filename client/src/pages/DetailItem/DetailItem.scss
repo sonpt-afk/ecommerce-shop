@@ -1,0 +1,17 @@
+.intro {
+    background-image: url("~/assets/images/bg_breadcrumb.jpg");
+    color: #fff;
+    height: 220px;
+    align-items: center;
+    display: flex;
+    &-content {
+        text-align: center;
+        width: 100%;
+    }
+    h1 {
+        font-size: 25px;
+    }
+    p {
+        font-size: 14px;
+    }
+}
