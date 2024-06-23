@@ -14,8 +14,8 @@ import DetailItem from "~/pages/DetailItem"
 import BaseLayout from "~/components/Layout/BaseLayout"
 import Home from "~/pages/Home"
 import Category from "~/pages/Category"
-
-
+import Register from "~/pages/Register"
+import Login from "~/pages/Login"
 
 const router = createBrowserRouter([{
   path: '/',
@@ -23,6 +23,8 @@ const router = createBrowserRouter([{
   children: [
     { path: '/', element: <Home /> },
     { path: '/item-detail', element: <DetailItem /> },
+    { path: '/account/register', element: <Register /> },
+    { path: '/account/login', element: <Login /> },
 
     { path: '/danh-muc/:category', element: <Category /> },
 

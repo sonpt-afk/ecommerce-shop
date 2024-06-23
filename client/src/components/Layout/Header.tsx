@@ -136,7 +136,9 @@ const NavBar: React.FC = () => {
                                 <ShoppingCartOutlined className='app-icon' />
                             </Badge>
                         </Link>
-                        <UserOutlined className='app-icon' />
+                        {/* <UserOutlined className='app-icon' /> */}
+                        <Link to="/account/register">Đăng kí</Link>
+                        <Link to="/account/login">Đăng nhập</Link>
                     </Space>
 
                 </Col>
