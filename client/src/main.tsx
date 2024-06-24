@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import {
   createBrowserRouter,
-  RouterProvider,
+  RouterProvider, useParams
 } from "react-router-dom";
 import '~/configs/axios';
 // import router from '~/router';
@@ -17,12 +17,20 @@ import Category from "~/pages/Category"
 import Register from "~/pages/Register"
 import Login from "~/pages/Login"
 
+// let { productId } = useParams()
 const router = createBrowserRouter([{
   path: '/',
   element: <BaseLayout />,
   children: [
     { path: '/', element: <Home /> },
-    { path: '/item-detail', element: <DetailItem /> },
+    // { path: '/item-detail', element: <DetailItem /> },
+    {
+      path: '/item-detail/',
+
+      children: [
+        { path: ':productId', element: <DetailItem /> }
+      ]
+    },
     { path: '/account/register', element: <Register /> },
     { path: '/account/login', element: <Login /> },
 

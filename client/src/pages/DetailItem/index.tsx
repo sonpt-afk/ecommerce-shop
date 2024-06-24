@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import "./DetailItem.scss";
 import vans1 from "~/assets/images/vans1.jpg";
 import { Button, Input, Form } from 'antd';
-import { FaPlus } from "react-icons/fa";
-import { FaMinus, FaShoppingCart } from "react-icons/fa";
-
+import { FaShoppingCart } from "react-icons/fa";
+import DetailModal from "./DetailModal"
 const DetailItem = () => {
-    const [activeSize, setActiveSize] = useState<number | null>(null);
-    const [quantityItem, setQuantityItem] = useState(1)
+    const [activeSize, setActiveSize] = useState<number>(0);
+    const [quantityItem, setQuantityItem] = useState<number>(1)
+    const [isShowDetail, setIsShowDetail] = useState<boolean>(true);
     const handleChooseSize = (size: number) => {
         setActiveSize(size); // Update active size
     };
+
     const [form] = Form.useForm();
     const handleDecrease = () => {
         setQuantityItem(quantityItem - 1)
-        console.log("quantityItem", quantityItem - 1);
         form.setFieldsValue({ quantity: quantityItem - 1 });
 
     }
 
     const handleIncrease = () => {
         setQuantityItem(quantityItem + 1)
-        console.log("quantityItem", quantityItem + 1)
         form.setFieldsValue({ quantity: quantityItem + 1 });
 
     }
+    const handleOpenDetailModal = () => {
+        setIsShowDetail(true)
+
+    }
+
     return (
         <div>
             <div className="intro">
@@ -47,7 +51,7 @@ const DetailItem = () => {
                         <p className="main-item-price-original">1.800.000đ</p>
                     </div>
                     <div className="main-item-size">
-                        <p>SIZE</p>
+                        <p>SIZE MEN</p>
                         <div className="main-item-size-list">
                             {[37, 38, 39, 40, 41, 42, 43].map(size => (
                                 <Button
@@ -75,18 +79,29 @@ const DetailItem = () => {
                                 ></Input>
                             </Form.Item>
 
-                            <Button className='main-item-buy-btn'>
-                                <FaShoppingCart /> Mua ngay
+                            <Button className='main-item-buy-btn' onClick={handleOpenDetailModal}>
+                                <FaShoppingCart /> <span className="main-item-buy-btn-text">Mua ngay</span>
                             </Button>
                         </Form>
                         <Button onClick={handleIncrease} >+</Button>
+                        <>
+                            {isShowDetail && (<DetailModal
+                                onCancel={() => setIsShowDetail(false)
+                                }
+                                quantity={quantityItem}
 
+                            />)}
+                            {/* {<DetailModal isModalOpen={isModalOpen}/>} */}
+
+                        </>
                     </div>
 
 
                 </div>
             </div>
+
         </div >
+
     );
 };
 

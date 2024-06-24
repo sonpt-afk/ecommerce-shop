@@ -55,7 +55,7 @@ const Home = () => {
                             <p className="collection-item-price-sale">1.500.000đ</p>
                             <p className="collection-item-price-original">1.800.000đ</p>
                         </div>
-                        <Link to={"/item-detail"} className="collection-item-up-detail" >Xem chi tiết</Link>
+                        <Link to={"/item-detail/1"} className="collection-item-up-detail" >Xem chi tiết</Link>
 
                     </div>
                 </Col>
