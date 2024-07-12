@@ -1,4 +1,6 @@
 import { StatusCodes } from 'http-status-codes'
+import Joi from 'joi'
+
 
 
 //xem tat ca san pham
@@ -9,36 +11,31 @@ const getAll = async (req, res, next) => {
     next(error)
   }
 }
-//them san pham moi
-const createItem = async (req, res, next) => {
-  try {
-    
 
-    // Có kết quả thì trả về phía client
-    res.status(StatusCodes.CREATED).json(createdBoard)
-  } catch (error) {
-    next(error)
-  }
-}
 
 //them vao gio hang
 const addToCart = async (req, res, next) => {
-  try {
-   
+  const correctCondition = Joi.object({
+    quantity: Joi.number().required().min().max(1000).trim().strict()
+})
 
-    // Có kết quả thì trả về phía client
-    res.status(StatusCodes.CREATED).json(createdBoard)
-  } catch (error) {
-    next(error)
-  }
+try{
+  res.status(StatusCodes.CREATED).json({message: 'POST from validation: api create new board'})
+}catch(error){
+  console.log(error);
+  res.status(StatusCodes.UNPROCESSABLE_ENTITY).json({
+    errors: new Error(error).message
+  })
+}
 }
 
 //xem gio hang
-const getCart = async (req, res, next) => {
+const viewCart = async (req, res, next) => {
 
 }
+
 //xem chi tiet san pham
-const getDetail = async (req, res, next) => {
+const viewDetailItem = async (req, res, next) => {
   try {
     
   } catch (error) {
@@ -47,7 +44,7 @@ const getDetail = async (req, res, next) => {
 }
 
 //cap nhat info san pham
-const updateItem = async (req, res, next) => {
+const updateDetailItem = async (req, res, next) => {
   try {
    
   } catch (error) {
@@ -67,11 +64,10 @@ const deleteItem = async (req, res, next) => {
 
 
 export const itemValidations = {
-    createItem,
-  getDetail,
-  updateItem,
+    viewDetailItem,
+  updateDetailItem,
   deleteItem,
   getAll,
   addToCart,
-  getCart,
+  viewCart,
 }

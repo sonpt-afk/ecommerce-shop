@@ -1,22 +1,54 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import { Button, Checkbox, Form, Input, notification } from 'antd';
 import { Link, useNavigate } from 'react-router-dom'
+import { createUserApi } from '../../util/api';
+
 const Register = () => {
-    const nav = useNavigate()
+    const onFinish = async (values) => {
+        const { email, password, name } = values;
+
+        const res = await createUserApi(email, password, name)
+        if (res) {
+            notification.success({
+                message: "CREATE USER",
+                description: "Success"
+            })
+        } else {
+            notification.error({
+                message: "CREATE USER",
+                description: "error"
+            })
+        }
+        console.log('Success:', res);
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
     return (
         <div>
             <h3>Đăng ký</h3>
-            <Form>
-                <Form.Item
-                    label="Họ "
-                    name="first_name"
-                    rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
-                >
-                    <Input />
-                </Form.Item>
+            <Form
+                name="basic"
+                labelCol={{
+                    span: 8,
+                }}
+                wrapperCol={{
+                    span: 16,
+                }}
+                style={{
+                    maxWidth: 600,
+                }}
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                layout="vertical">
+
                 <Form.Item
                     label="Tên "
-                    name="last_name"
+                    name="name"
                     rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
                 >
                     <Input />
@@ -28,7 +60,7 @@ const Register = () => {
                 >
                     <Input />
                 </Form.Item>
-                <Form.Item
+                {/* <Form.Item
                     label="Số điện thoại
 "
                     name="phone"
@@ -39,7 +71,7 @@ const Register = () => {
 
                 >
                     <Input />
-                </Form.Item>
+                </Form.Item> */}
                 <Form.Item
                     label="Mật khẩu"
                     name="password"

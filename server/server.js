@@ -1,41 +1,45 @@
 import express from 'express'
-import exitHook from 'async-exit-hook'
-import { CLOSE_DB, CONNECT_DB } from '~/config/mongodb'
-import { env } from '~/config/environment'
-import { APIs_V1 } from '~/routes/index'
-import { errorHandlingMiddleware } from '~/middlewares/errorHandlingMiddleware'
 import cors from 'cors'
-import { corsOptions } from '~/config/cors'
-import {config} from 'dotenv'
-import mongoose from 'mongoose';
+// import { corsOptions } from '~/config/cors'
+require('dotenv').config();
+const connection = require('~/config/database');
+
+const apiRoutes = require('~/routes/');
+const configViewEngine = require('~/config/viewEngine');
+const port = process.env.PORT || 8888;
 
 const START_SERVER = () => {
   const app = express()
 
   // Xử lý CORS
-  app.use(cors(corsOptions))
+  app.use(cors())
 
-  // Enabel req.body json data
-  app.use(express.json())
-
-  // Use APIs V1
-  app.use('/v1', APIs_V1)
-  // Middleware xử lý lỗi tập trung
  
-  app.use(errorHandlingMiddleware)
-  app.get('/', (req, res) => {
-    res.send('Hello World!')
-  })
-  app.listen(env.LOCAL_DEV_APP_PORT, () => {
-    console.log(`Example app listening on port ${env.LOCAL_DEV_APP_PORT}`)
-  })
-  // mongoose.connect(env.MONGODB_URI ?? "")
-  // .then(() => {
-  //     console.log('Connected to MongoDB ')
-  //     app.listen(env.LOCAL_DEV_APP_PORT,() => {
-  //       console.log(`Example app listening on port ${env.LOCAL_DEV_APP_PORT}`)
-  //     })
-  // })
+//config req.body
+app.use(express.json()) // for json
+app.use(express.urlencoded({ extended: true })) // for form data
+
+//config template engine
+configViewEngine(app);
+
+//khai báo route
+app.use('/v1/api/', apiRoutes);
+// app.use('/', getHomepage);
+
+
+(async () => {
+    try {
+        //using mongoose
+        await connection();
+
+        app.listen(port, () => {
+            console.log(`Backend Nodejs App listening on port ${port}`)
+        })
+    } catch (error) {
+        console.log(">>> Error connect to DB: ", error)
+    }
+})()
+
   
 }
 

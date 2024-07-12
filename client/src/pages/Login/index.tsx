@@ -1,12 +1,54 @@
 import React from 'react'
-import { Form, Input, Button } from 'antd'
+import { Button, Checkbox, Form, Input, notification } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
+import { loginApi } from '../../util/api';
+
 const Login = () => {
-    const nav = useNavigate()
+    const navigate = useNavigate();
+    const onFinish = async (values) => {
+        const { email, password } = values;
+
+        const res = await loginApi(email, password);
+        if (res && res.EC === 0) {
+            localStorage.setItem("access_token", res.access_token);
+            notification.success({
+                message: "LOGIN USER",
+                description: "Success"
+            });
+            navigate("/")
+        } else {
+            notification.error({
+                message: "LOGIN USER",
+                description: res?.EM ?? "error"
+            })
+        }
+        console.log('Success:', res);
+    };
+    const onFinishFailed = (errorInfo) => {
+        console.log('Failed:', errorInfo);
+    };
     return (
         <div>
-            <h3>Đăng ký</h3>
-            <Form>
+            <h3>Đăng nhập</h3>
+            <Form
+                name="basic"
+                labelCol={{
+                    span: 8,
+                }}
+                wrapperCol={{
+                    span: 16,
+                }}
+                style={{
+                    maxWidth: 600,
+                }}
+                initialValues={{
+                    remember: true,
+                }}
+                onFinish={onFinish}
+                onFinishFailed={onFinishFailed}
+                autoComplete="off"
+                layout='vertical'
+            >
 
                 <Form.Item
                     label="Email"

@@ -4,13 +4,7 @@ import { FaCheck } from "react-icons/fa";
 import { FaShoppingCart } from "react-icons/fa";
 import vans1 from "~/assets/images/vans1.jpg"
 const DetailModal = ({ onCancel, quantity }) => {
-    // const handleOk = () => {
-    //     setIsModalDetailOpen(false);
-    // };
-
-    // const handleCancel = () => {
-    //     setIsModalDetailOpen(false);
-    // };
+    
     return (
         <>
 

@@ -1,21 +1,20 @@
 import express from 'express'
-import { StatusCodes } from 'http-status-codes'
 import { cartRoute } from './cart.js'
 import { accountRoute } from './account.js'
+const {createUser,handleLogin,getUser} = require('../controllers/userController')
 
-const Router = express.Router()
+const routerAPI = express.Router()
 
-// Check APIs v1/status
-Router.get('/status', (req, res) => {
-  res.status(StatusCodes.OK).json({
-    message: 'APIs V1 are ready to use.'
-  })
+
+// cart APIs
+routerAPI.use('/cart', cartRoute)
+
+
+routerAPI.get("/", (req,res) => {
+  return res.status(200).json("hello world with api")
 })
 
-// account APIs
-Router.use('/account', accountRoute)
-
-// Columns APIs
-Router.use('/cart', cartRoute)
-
-export const APIs_V1 = Router
+routerAPI.post("/register",createUser)
+routerAPI.post("/login",handleLogin)
+routerAPI.get("/user",getUser)
+module.exports = routerAPI

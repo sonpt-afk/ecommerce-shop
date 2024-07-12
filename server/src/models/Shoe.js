@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-
+import Joi from 'joi';
 const Schema = mongoose.Schema;
 
 const ShoeSchema = new Schema({
