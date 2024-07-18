@@ -7,7 +7,7 @@ const Register = () => {
     const onFinish = async (values) => {
         const { email, password, name } = values;
 
-        const res = await createUserApi(email, password, name)
+        const res = await createUserApi(name, email, password)
         if (res) {
             notification.success({
                 message: "CREATE USER",

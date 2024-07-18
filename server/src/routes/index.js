@@ -2,10 +2,12 @@ import express from 'express'
 import { cartRoute } from './cart.js'
 import { accountRoute } from './account.js'
 const {createUser,handleLogin,getUser} = require('../controllers/userController')
-
+const {addProduct } = require('../controllers/productController')
+const delay = require("../middleware/delay.js")
+const auth = require("../middleware/auth.js")
 const routerAPI = express.Router()
 
-
+// routerAPI.all("*",auth)
 // cart APIs
 routerAPI.use('/cart', cartRoute)
 
@@ -17,4 +19,6 @@ routerAPI.get("/", (req,res) => {
 routerAPI.post("/register",createUser)
 routerAPI.post("/login",handleLogin)
 routerAPI.get("/user",getUser)
+routerAPI.post("/products",addProduct)
+
 module.exports = routerAPI

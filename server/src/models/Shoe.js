@@ -1,13 +1,12 @@
 import mongoose from 'mongoose';
 import Joi from 'joi';
-const Schema = mongoose.Schema;
 
-const ShoeSchema = new Schema({
+const ShoeSchema = new mongoose.Schema({
     name: String,
-    size: Number,
-    price: Number,
+    image: String,
+    countInStock: Number
 })
 
-const ShoeModel = mongoose.model('Shoe', ShoeSchema);
+const Shoe = mongoose.model('shoe', ShoeSchema);
 
-export default ShoeModel;
+module.exports =  Shoe;

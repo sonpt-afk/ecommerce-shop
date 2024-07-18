@@ -1,5 +1,5 @@
 
-const User = require("../models/User");
+import {IUser, User} from '../models/User'
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 const jwt = require("jsonwebtoken")
@@ -19,7 +19,6 @@ const createUserService = async (name,email,password) => {
             name: name,
             email: email,
             password: hashPassword,
-            role: "boss"
                 })
         return result;
 
@@ -71,7 +70,6 @@ const loginService = async (email,password) => {
         let result = await User.create({
             email: email,
             password: hashPassword,
-            role: "boss"
                 })
         return result;
 
