@@ -19,7 +19,6 @@ const createUserService = async (name,email,password) => {
             name: name,
             email: email,
             password: hashPassword,
-            role: "boss"
                 })
         return result;
 
@@ -66,13 +65,12 @@ const loginService = async (email,password) => {
                 }
             }
         }   
-        //hash password
-        const hashPassword = await bcrypt.hash(password, saltRounds)
-        let result = await User.create({
-            email: email,
-            password: hashPassword,
-            role: "boss"
-                })
+        else{
+            return {
+                EC: 2,
+                EM: 'Email/pass không hợp lệ'
+            }
+        }
         return result;
 
     } catch (error) {

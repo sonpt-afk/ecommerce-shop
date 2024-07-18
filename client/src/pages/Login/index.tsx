@@ -1,12 +1,14 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Button, Checkbox, Form, Input, notification } from 'antd'
 import { Link, useNavigate } from 'react-router-dom'
 import { loginApi } from '../../util/api';
 import { Spin } from "antd";
+import { AuthContext } from '~/components/context/auth.context'
 const Login = () => {
     const [loading, setLoading] = useState(false);
-
+    const [form] = Form.useForm();
     const navigate = useNavigate();
+    const { setAuth } = useContext(AuthContext);
     const onFinish = async (values) => {
         const { email, password } = values;
 
@@ -16,6 +18,13 @@ const Login = () => {
             notification.success({
                 message: "LOGIN USER",
                 description: "Success"
+            });
+            setAuth({
+                isAuthenticated: true,
+                user: {
+                    email: res?.user?.email ?? "",
+                    name: res?.user?.name ?? ""
+                },
             });
             navigate("/")
         } else {
@@ -37,6 +46,8 @@ const Login = () => {
                 <h3>Đăng nhập</h3>
                 <Form
                     name="basic"
+                    form={form}
+
                     labelCol={{
                         span: 8,
                     }}

@@ -50,6 +50,12 @@
     }
 }
 
+.logout {
+    &:hover {
+        cursor: pointer;
+    }
+    color: rgb(38, 122, 191);
+}
 .menu {
     position: relative;
     bottom: 10px;

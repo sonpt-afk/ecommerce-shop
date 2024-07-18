@@ -4,6 +4,8 @@ import { Link, useNavigate } from 'react-router-dom'
 import { createUserApi } from '../../util/api';
 
 const Register = () => {
+    const [form] = Form.useForm();
+
     const onFinish = async (values) => {
         const { email, password, name } = values;
 
@@ -19,7 +21,8 @@ const Register = () => {
                 description: "error"
             })
         }
-        console.log('Success:', res);
+        form.resetFields();
+
     };
     const onFinishFailed = (errorInfo) => {
         console.log('Failed:', errorInfo);
@@ -28,6 +31,7 @@ const Register = () => {
         <div>
             <h3>Đăng ký</h3>
             <Form
+                form={form}
                 name="basic"
                 labelCol={{
                     span: 8,

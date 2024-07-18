@@ -16,7 +16,7 @@ import Home from "~/pages/Home"
 import Category from "~/pages/Category"
 import Register from "~/pages/Register"
 import Login from "~/pages/Login"
-
+import { AuthWrapper } from "~/components/context/auth.context.jsx"
 // let { productId } = useParams()
 const router = createBrowserRouter([{
   path: '/',
@@ -40,8 +40,8 @@ const router = createBrowserRouter([{
 }])
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <AuthWrapper>
       <RouterProvider router={router} />
-    </Provider>
+    </AuthWrapper>
   </React.StrictMode>,
 )

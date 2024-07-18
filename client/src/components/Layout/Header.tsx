@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { StoreLogo } from '~/assets'
 import { Row, Col, Menu, Drawer, Badge } from 'antd'
 import { MenuOutlined, ShoppingCartOutlined } from '@ant-design/icons'
@@ -11,11 +11,14 @@ import { DownOutlined, SmileOutlined, SearchOutlined, UserOutlined } from '@ant-
 import { Flex } from "antd";
 import type { MenuProps } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { AuthContext } from '~/components/context/auth.context';
+import { RxAvatar } from "react-icons/rx";
 
 const NavBar: React.FC = () => {
     const [isOpenSearch, setIsOpenSearch] = useState(false);
     const [isDrawerOpen, setIsOpenDrawer] = useState(false);
     const navigate = useNavigate();
+    const { setAuth } = useContext(AuthContext);
 
     const showDrawer = () => {
         setIsOpenDrawer(true);
@@ -23,8 +26,8 @@ const NavBar: React.FC = () => {
     const closeDrawer = () => {
         setIsOpenDrawer(false);
     };
-
-
+    const { auth } = useContext(AuthContext);
+    console.log('auth:', auth);
     const items: MenuProps['items'] = [
         {
             key: '1',
@@ -137,8 +140,28 @@ const NavBar: React.FC = () => {
                             </Badge>
                         </Link>
                         {/* <UserOutlined className='app-icon' /> */}
-                        <Link to="/account/register">Đăng kí</Link>
-                        <Link to="/account/login">Đăng nhập</Link>
+                        {!auth.isAuthenticated ? (
+                            <>
+                                <Link to="/account/register">Đăng kí</Link>
+                                <Link to="/account/login">Đăng nhập</Link>
+                            </>
+                        ) : (
+                            <>
+                                <RxAvatar />
+                                <span>{auth?.user?.name}</span>
+                                <span className="logout" onClick={() => {
+                                    localStorage.removeItem("access_token");
+                                    setAuth({
+                                        isAuthenticated: false,
+                                        user: {
+                                            email: "",
+                                            name: ""
+                                        },
+                                    });
+                                    navigate('/')
+                                }}>Đăng xuất</span>
+                            </>
+                        )}
                     </Space>
 
                 </Col>
