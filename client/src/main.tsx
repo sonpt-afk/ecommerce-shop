@@ -9,7 +9,7 @@ import '~/configs/axios';
 import { lazy } from 'react';
 import '~/assets/css/index.scss';
 import { Provider } from 'react-redux';
-import { store } from '~/redux/store';
+import { configureStore } from '@reduxjs/toolkit';
 import DetailItem from "~/pages/DetailItem"
 import BaseLayout from "~/components/Layout/BaseLayout"
 import Home from "~/pages/Home"
@@ -17,7 +17,10 @@ import Category from "~/pages/Category"
 import Register from "~/pages/Register"
 import Login from "~/pages/Login"
 import { AuthWrapper } from "~/components/context/auth.context.jsx"
+import cartReducer from "~/redux/cartSlice/index.jsx"
 // let { productId } = useParams()
+import { store } from '~/redux/store.jsx';
+
 const router = createBrowserRouter([{
   path: '/',
   element: <BaseLayout />,
@@ -40,8 +43,10 @@ const router = createBrowserRouter([{
 }])
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <AuthWrapper>
-      <RouterProvider router={router} />
-    </AuthWrapper>
+    <Provider store={store}>
+      <AuthWrapper>
+        <RouterProvider router={router} />
+      </AuthWrapper>
+    </Provider>
   </React.StrictMode>,
 )

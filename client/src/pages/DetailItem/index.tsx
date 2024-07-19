@@ -4,10 +4,26 @@ import vans1 from "~/assets/images/vans1.jpg";
 import { Button, Input, Form } from 'antd';
 import { FaShoppingCart } from "react-icons/fa";
 import DetailModal from "./DetailModal"
-const DetailItem = () => {
+import { useDispatch } from "react-redux"
+import { shades } from "~/theme"
+import { useNavigate } from 'react-router-dom';
+const DetailItem = ({ item, width }) => {
     const [activeSize, setActiveSize] = useState<number>(0);
     const [quantityItem, setQuantityItem] = useState<number>(1)
-    const [isShowDetail, setIsShowDetail] = useState<boolean>(true);
+    const [isShowDetail, setIsShowDetail] = useState<boolean>(false);
+    const [isHovered, setIsHovered] = useState<boolean>(false);
+
+    const { category, price, name, image } = item.attributes;
+    const {
+        data: {
+            attributes: {
+                formats: {
+                    medium: { url },
+                }
+            }
+        }
+    } = image;
+
     const handleChooseSize = (size: number) => {
         setActiveSize(size); // Update active size
     };
@@ -29,6 +45,12 @@ const DetailItem = () => {
 
     }
 
+    const dispatch = useDispatch()
+
+
+    useEffect(() => {
+        window.scrollTo(0, 0)
+    }, [])
     return (
         <div>
             <div className="intro">
@@ -79,7 +101,11 @@ const DetailItem = () => {
                                 ></Input>
                             </Form.Item>
 
-                            <Button className='main-item-buy-btn' onClick={handleOpenDetailModal}>
+                            <Button className='main-item-buy-btn' onClick={
+                                () => {
+                                    handleOpenDetailModal()
+                                }
+                            }>
                                 <FaShoppingCart /> <span className="main-item-buy-btn-text">Mua ngay</span>
                             </Button>
                         </Form>
