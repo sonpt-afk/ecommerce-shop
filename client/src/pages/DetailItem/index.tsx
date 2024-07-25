@@ -7,46 +7,36 @@ import DetailModal from "./DetailModal"
 import { useDispatch } from "react-redux"
 import { shades } from "~/theme"
 import { useNavigate } from 'react-router-dom';
-const DetailItem = ({ item, width }) => {
+import { addProduct } from "~/redux/cartSlice/index.jsx";
+import { useSelector, useDispatch } from 'react-redux';
+const DetailItem = () => {
     const [activeSize, setActiveSize] = useState<number>(0);
-    const [quantityItem, setQuantityItem] = useState<number>(1)
+    const [quantity, setQuantity] = useState<number>(1)
     const [isShowDetail, setIsShowDetail] = useState<boolean>(false);
     const [isHovered, setIsHovered] = useState<boolean>(false);
-
-    const { category, price, name, image } = item.attributes;
-    const {
-        data: {
-            attributes: {
-                formats: {
-                    medium: { url },
-                }
-            }
-        }
-    } = image;
-
+    const [product, setProduct] = useState<any>({})
+    const [price, setPrice] = useState<number>(100000)
     const handleChooseSize = (size: number) => {
         setActiveSize(size); // Update active size
     };
 
+    const dispatch = useDispatch();
     const [form] = Form.useForm();
     const handleDecrease = () => {
-        setQuantityItem(quantityItem - 1)
-        form.setFieldsValue({ quantity: quantityItem - 1 });
+        setQuantity(quantity - 1)
+        form.setFieldsValue({ quantity: quantity - 1 });
 
     }
 
     const handleIncrease = () => {
-        setQuantityItem(quantityItem + 1)
-        form.setFieldsValue({ quantity: quantityItem + 1 });
+        setQuantity(quantity + 1)
+        form.setFieldsValue({ quantity: quantity + 1 });
 
     }
     const handleOpenDetailModal = () => {
         setIsShowDetail(true)
 
     }
-
-    const dispatch = useDispatch()
-
 
     useEffect(() => {
         window.scrollTo(0, 0)
@@ -69,8 +59,8 @@ const DetailItem = ({ item, width }) => {
                     <h3 className="main-item">VANS Old Skool Classic Black/White</h3>
                     <p>Thương hiệu: <span className="main-item-brand">VANS </span><span>/</span> <span>Mã sản phẩm:</span> <span className="main-item-brand">VN000EE3BLK </span></p>
                     <div className="main-item-price">
-                        <p className="main-item-price-sale">1.500.000đ</p>
-                        <p className="main-item-price-original">1.800.000đ</p>
+                        <p className="main-item-price-sale">{price} đ</p>
+                        {/* <p className="main-item-price-original">1.800.000đ</p> */}
                     </div>
                     <div className="main-item-size">
                         <p>SIZE MEN</p>
@@ -91,19 +81,20 @@ const DetailItem = ({ item, width }) => {
                         <div className="main-item-quantity-text"><p>Chọn số lượng</p></div>
 
                         <Button onClick={handleDecrease}>-</Button>
-                        <Form form={form} initialValues={{ quantity: quantityItem }}>
+                        <Form form={form} initialValues={{ quantity: quantity }}>
                             <Form.Item
                                 name="quantity"
 
                             >
                                 <Input
-                                    onChange={(e) => setQuantityItem(parseInt(e.target.value))}
+                                    onChange={(e) => setQuantity(parseInt(e.target.value))}
                                 ></Input>
                             </Form.Item>
 
                             <Button className='main-item-buy-btn' onClick={
                                 () => {
-                                    handleOpenDetailModal()
+                                    // handleOpenDetailModal();
+                                    dispatch(addProduct({ product, quantity, price: price * quantity }));
                                 }
                             }>
                                 <FaShoppingCart /> <span className="main-item-buy-btn-text">Mua ngay</span>
@@ -114,7 +105,7 @@ const DetailItem = ({ item, width }) => {
                             {isShowDetail && (<DetailModal
                                 onCancel={() => setIsShowDetail(false)
                                 }
-                                quantity={quantityItem}
+                                quantity={quantity}
 
                             />)}
                             {/* {<DetailModal isModalOpen={isModalOpen}/>} */}

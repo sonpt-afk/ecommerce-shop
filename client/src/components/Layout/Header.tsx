@@ -13,7 +13,7 @@ import type { MenuProps } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { AuthContext } from '~/components/context/auth.context';
 import { RxAvatar } from "react-icons/rx";
-
+import { useSelector } from 'react-redux';
 const NavBar: React.FC = () => {
     const [isOpenSearch, setIsOpenSearch] = useState(false);
     const [isDrawerOpen, setIsOpenDrawer] = useState(false);
@@ -27,7 +27,9 @@ const NavBar: React.FC = () => {
         setIsOpenDrawer(false);
     };
     const { auth } = useContext(AuthContext);
-    console.log('auth:', auth);
+
+    const quantity = useSelector(state => state.cart.quantity);
+
     const items: MenuProps['items'] = [
         {
             key: '1',
@@ -135,7 +137,7 @@ const NavBar: React.FC = () => {
                     <Space>
                         <SearchComponent />
                         <Link to='/cart'>
-                            <Badge count={0}>
+                            <Badge count={quantity}>
                                 <ShoppingCartOutlined className='app-icon' />
                             </Badge>
                         </Link>
